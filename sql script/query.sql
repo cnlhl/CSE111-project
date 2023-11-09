@@ -84,3 +84,65 @@ SELECT * FROM meeting WHERE meetingid IN (SELECT meetingid FROM attendee WHERE u
 
 -- 29. Find all meetings that a user is organizing
 SELECT * FROM meeting WHERE organizerid = 1;
+
+-- 30. Get all meetings organized by a specific user along with the agenda items for each meeting
+SELECT user.username, meeting.title, agenda.topic
+FROM user
+JOIN meeting ON user.userid = meeting.organizerid
+JOIN agenda ON meeting.meetingid = agenda.meetingid
+WHERE user.username = 'user1';
+
+-- 31. Get all attendees for all meetings organized by a specific user
+SELECT user.username, meeting.title, attendee.userid
+FROM user
+JOIN meeting ON user.userid = meeting.organizerid
+JOIN attendee ON meeting.meetingid = attendee.meetingid
+WHERE user.username = 'user1';
+
+-- 32. Get all resources for all meetings organized by a specific user
+SELECT user.username, meeting.title, resource.resourcename
+FROM user
+JOIN meeting ON user.userid = meeting.organizerid
+JOIN meetingresource ON meeting.meetingid = meetingresource.meetingid
+JOIN resource ON meetingresource.resourceid = resource.resourceid
+WHERE user.username = 'user1';
+
+-- 33. Get the count of meetings each user has organized
+SELECT user.username, COUNT(meeting.meetingid) AS meeting_count
+FROM user
+JOIN meeting ON user.userid = meeting.organizerid
+GROUP BY user.username;
+
+-- 34. Get the user who has organized the most meetings
+SELECT user.username, COUNT(meeting.meetingid) AS meeting_count
+FROM user
+JOIN meeting ON user.userid = meeting.organizerid
+GROUP BY user.username
+ORDER BY meeting_count DESC
+LIMIT 1;
+
+-- 35. Get all users who have not organized any meetings
+SELECT user.username
+FROM user
+LEFT JOIN meeting ON user.userid = meeting.organizerid
+WHERE meeting.meetingid IS NULL;
+
+-- 36. Get the average duration of all agenda items for each meeting
+SELECT meeting.title, AVG(agenda.duration) AS average_duration
+FROM meeting
+JOIN agenda ON meeting.meetingid = agenda.meetingid
+GROUP BY meeting.title;
+
+-- 37. Get all meetings that have more than 3 agenda items
+SELECT meeting.title
+FROM meeting
+JOIN agenda ON meeting.meetingid = agenda.meetingid
+GROUP BY meeting.title
+HAVING COUNT(agenda.agendaid) > 3;
+
+-- 38. Get all meetings that have more than 3 attendees
+SELECT meeting.title
+FROM meeting
+JOIN attendee ON meeting.meetingid = attendee.meetingid
+GROUP BY meeting.title
+HAVING COUNT(attendee.attendeeid) > 3;
