@@ -1,23 +1,23 @@
 -- 1. Insert a new user
-INSERT INTO user (username, email, password) VALUES ('username', 'email@example.com', 'password');
+INSERT INTO user (username, email, password) VALUES ('haolinli', 'haolin@example.com', 'password');
 
 -- 2. Update a user's email
-UPDATE user SET email = 'newemail@example.com' WHERE userid = 1;
+UPDATE user SET email = 'newemail@ucmerced.edu' WHERE userid = 21;
 
 -- 3. Delete a user
-DELETE FROM user WHERE userid = 1;
+DELETE FROM user WHERE userid = 21;
 
 -- 4. Query all meetings for a specific user
 SELECT * FROM meeting WHERE organizerid = 1;
 
 -- 5. Insert a new meeting
-INSERT INTO meeting (title, description, time, location, organizerid) VALUES ('Meeting Title', 'Meeting Description', '2022-01-01 10:00:00', 'Location', 1);
+INSERT INTO meeting (title, description, time, location, organizerid) VALUES ('Project presentation', 'pre for pj', '2023-11-10 10:00:00', 'library', 1);
 
 -- 6. Update a meeting's description
-UPDATE meeting SET description = 'New Meeting Description' WHERE meetingid = 1;
+UPDATE meeting SET description = 'New Meeting Description' WHERE meetingid = 21;
 
 -- 7. Delete a meeting
-DELETE FROM meeting WHERE meetingid = 1;
+DELETE FROM meeting WHERE meetingid = 21;
 
 -- 8. Query all attendees for a specific meeting
 SELECT * FROM attendee WHERE meetingid = 1;
@@ -26,10 +26,10 @@ SELECT * FROM attendee WHERE meetingid = 1;
 INSERT INTO agenda (topic, duration, meetingid) VALUES ('Agenda Topic', 30, 1);
 
 -- 10. Update an agenda item's duration
-UPDATE agenda SET duration = 45 WHERE agendaid = 1;
+UPDATE agenda SET duration = 45 WHERE agendaid = 21;
 
 -- 11. Delete an agenda item
-DELETE FROM agenda WHERE agendaid = 1;
+DELETE FROM agenda WHERE agendaid = 21;
 
 -- 12. Query all agenda items for a specific meeting
 SELECT * FROM agenda WHERE meetingid = 1;
@@ -38,16 +38,16 @@ SELECT * FROM agenda WHERE meetingid = 1;
 INSERT INTO attendee (userid, meetingid, status) VALUES (1, 1, 'Attending');
 
 -- 14. Update an attendee's status for a meeting
-UPDATE attendee SET status = 'Not Attending' WHERE attendeeid = 1;
+UPDATE attendee SET status = 'Not Attending' WHERE attendeeid = 21;
 
 -- 15. Delete an attendee from a meeting
-DELETE FROM attendee WHERE attendeeid = 1;
+DELETE FROM attendee WHERE attendeeid = 21;
 
 -- 16. Insert a new notification for a user
-INSERT INTO notification (userid, message, timestamp) VALUES (1, 'Notification Message', '2022-01-01 10:00:00');
+INSERT INTO notification (userid, message, timestamp) VALUES (1, 'Notification test Message', '2023-11-10 10:00:00');
 
 -- 17. Update a notification's message for a user
-UPDATE notification SET message = 'New Notification Message' WHERE notificationid = 1;
+UPDATE notification SET message = 'New Notification Message' WHERE notificationid = 21;
 
 -- 18. Delete a notification for a user
 DELETE FROM notification WHERE notificationid = 1;
@@ -59,10 +59,10 @@ SELECT * FROM notification WHERE userid = 1;
 INSERT INTO room (name, capacity, resourceid) VALUES ('Room Name', 10, 1);
 
 -- 21. Update a room's capacity
-UPDATE room SET capacity = 20 WHERE roomid = 1;
+UPDATE room SET capacity = 20 WHERE roomid = 21;
 
 -- 22. Delete a room
-DELETE FROM room WHERE roomid = 1;
+DELETE FROM room WHERE roomid = 21;
 
 -- 23. Query all resources for a specific room
 SELECT * FROM resource WHERE resourceid IN (SELECT resourceid FROM room WHERE roomid = 1);
@@ -78,3 +78,9 @@ DELETE FROM meetingresource WHERE meetingresourceid = 1;
 
 -- 27. Query all resources for a specific meeting
 SELECT * FROM resource WHERE resourceid IN (SELECT resourceid FROM meetingresource WHERE meetingid = 1);
+
+-- 28. Find all meetings that a user is attending
+SELECT * FROM meeting WHERE meetingid IN (SELECT meetingid FROM attendee WHERE userid = 1);
+
+-- 29. Find all meetings that a user is organizing
+SELECT * FROM meeting WHERE organizerid = 1;
