@@ -3,6 +3,14 @@
 
 Project by Haolin li &amp; Baixi Guo
 
+## Phase 3
+
+To do :
+- [ ] setting up cloud serves
+- [ ] finish backend code
+- [ ] front end
+- [ ] presentation
+
 ## Basic User Case
 ### Organizer
 1. Schedule Meeting
