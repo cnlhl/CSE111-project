@@ -6,8 +6,10 @@ Project by Haolin li &amp; Baixi Guo
 ## Phase 3
 
 To do :
-- [ ] setting up cloud serves
+- [x] setting up cloud serves
 - [ ] finish backend code
+  - [ ] basic updates/insert/delete
+  - [ ] higher hierachy operation: accord to UML 
 - [ ] front end
 - [ ] presentation
 
