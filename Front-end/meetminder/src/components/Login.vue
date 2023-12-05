@@ -16,6 +16,7 @@
 </template>
 
 <script>
+import { useRouter } from 'vue-router';
 export default {
   name: 'UserLogin', // 改为多单词的组件名称
   data() {
@@ -24,10 +25,15 @@ export default {
       password: ''
     };
   },
+  setup() {
+    const router = useRouter();
+    return { router };
+  },
   methods: {
     login() {
       // 登录逻辑
       console.log('登录', this.username, this.password);
+      this.router.push({ name: 'Home' });
     }
   }
 };
