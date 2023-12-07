@@ -60,6 +60,12 @@ CREATE TABLE notification (
         ON UPDATE CASCADE
 );
 
+CREATE TABLE resource (
+    resourceid   INTEGER PRIMARY KEY AUTO_INCREMENT,
+    resourcename TEXT NOT NULL,
+    description  TEXT
+);
+
 CREATE TABLE room (
     roomid   INTEGER PRIMARY KEY AUTO_INCREMENT,
     name     TEXT NOT NULL,
@@ -69,12 +75,6 @@ CREATE TABLE room (
         REFERENCES resource(resourceid) 
         ON DELETE CASCADE
         ON UPDATE CASCADE
-);
-
-CREATE TABLE resource (
-    resourceid   INTEGER PRIMARY KEY AUTO_INCREMENT,
-    resourcename TEXT NOT NULL,
-    description  TEXT
 );
 
 CREATE TABLE meetingresource (

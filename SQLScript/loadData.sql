@@ -169,7 +169,7 @@ INSERT INTO notification (userid, message, timestamp) VALUES
 (16, 'Upcoming deadline: Project submission.', '2023-11-13'),
 (7, 'Feedback requested for recent project.', '2023-11-14'),
 (1, 'Announcement: Company-wide Town Hall.', '2023-11-15'),
-(10, 'Happy Birthday! 🎉', '2023-11-16'),
+(10, 'Happy Birthday!', '2023-11-16'),
 (14, 'Training session scheduled for next week.', '2023-11-17'),
 (20, 'Emergency meeting called, please attend.', '2023-11-18'),
 (9, 'New job opportunity available.', '2023-11-19'),
