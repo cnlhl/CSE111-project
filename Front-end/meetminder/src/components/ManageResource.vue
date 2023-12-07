@@ -4,31 +4,44 @@
       <table>
         <thead>
           <tr>
+            <th>ID</th>
             <th>Name</th>
-            <th>Type</th>
+            <th>Description</th>
+            <th v-if="showRoomDetails">Room ID</th>
+            <th v-if="showRoomDetails">Room Name</th>
+            <th v-if="showRoomDetails">Capacity</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="resource in resources" :key="resource.id">
-            <td v-if="!resource.editing">{{ resource.name }}</td>
-            <td v-else><input type="text" v-model="resource.name" /></td>
-  
-            <td v-if="!resource.editing">{{ resource.type }}</td>
-            <td v-else><input type="text" v-model="resource.type" /></td>
-  
+            <td>{{ resource.id }}</td>
+            <td>
+              <input v-if="editable" type="text" v-model="resource.name">
+              <span v-else>{{ resource.name }}</span>
+            </td>
+            <td>
+              <input v-if="editable" type="text" v-model="resource.description">
+              <span v-else>{{ resource.description }}</span>
+            </td>
+            <template v-if="resource.description === 'room'">
+              <td>
+                <input v-if="editable" type="text" v-model="resource.roomID">
+                <span v-else>{{ resource.roomID }}</span>
+              </td>
+              <td>
+                <input v-if="editable" type="text" v-model="resource.roomname">
+                <span v-else>{{ resource.roomname }}</span>
+              </td>
+              <td>
+                <input v-if="editable" type="text" v-model="resource.capacity">
+                <span v-else>{{ resource.capacity }}</span>
+              </td>
+            </template>
             <td>
               <button v-if="!resource.editing" @click="editResource(resource)">Edit</button>
               <button v-else @click="saveResource(resource)">Save</button>
               <button @click="deleteResource(resource)">Delete</button>
-            </td>
-          </tr>
-          <tr v-if="addingResource">
-            <td><input type="text" v-model="newResource.name" /></td>
-            <td><input type="text" v-model="newResource.type" /></td>
-            <td>
-              <button @click="addResource">Add</button>
-              <button @click="cancelAddingResource">Cancel</button>
             </td>
           </tr>
         </tbody>
@@ -39,7 +52,7 @@
   </template>
   
   <script>
-  import { ref, reactive, onMounted } from 'vue';
+  import { ref, reactive, onMounted, computed } from 'vue';
   import { useRouter } from 'vue-router';
   import api from '@/api';
   
@@ -66,6 +79,9 @@
       const editResource = (resource) => {
         resource.editing = true;
       };
+      const showRoomDetails = computed(() => {
+      return resources.some(resource => resource.description === 'room');
+      });
   
       const saveResource = async (resource) => {
         try {
@@ -135,7 +151,8 @@
         startAddingResource,
         addResource,
         cancelAddingResource,
-        goHome
+        goHome,
+        showRoomDetails
       };
     }
   };
