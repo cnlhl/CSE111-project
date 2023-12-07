@@ -23,5 +23,11 @@ export default {
   },
   createMeeting(meeting) {
     return apiClient.post('/meetings', meeting);
+  },
+  getMeetings() {
+    return apiClient.get('/meetings');
+  },
+  updateMeeting(meeting) {
+    return apiClient.put(`/meetings/${meeting.id}`, meeting);
   }
 };

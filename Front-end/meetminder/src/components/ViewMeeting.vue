@@ -66,9 +66,10 @@
   
   
   <script>
-import { ref, reactive } from 'vue';
+import { ref, reactive,onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import VueMultiselect from 'vue-multiselect';
+import api from '@/api';
 
 export default {
   components: {
@@ -78,22 +79,48 @@ export default {
   setup() {
     const router = useRouter();
     const editable = ref(false);
-    const availableParticipants = ref([
-      // ...这里是可选参与者的列表...
-    ]);
-    const availableResources = ref([
-      // ...这里是可选资源的列表...
-    ]);
+    const availableParticipants = ref([]);
+    const availableResources = ref([]);
+    const loading = ref(false);
+    const errorMessage = ref('');
+
+    const fetchInitialData = async () => {
+      try {
+        loading.value = true;
+        const [meetingsResponse, participantsResponse, resourcesResponse] = await Promise.all([
+          api.getMeetings(),
+          api.getParticipants(),
+          api.getResources()
+        ]);
+        meetings.value = meetingsResponse.data;
+        availableParticipants.value = participantsResponse.data;
+        availableResources.value = resourcesResponse.data;
+      } catch (error) {
+        console.error('获取会议数据失败', error);
+        errorMessage.value = 'Failed to fetch data';
+      } finally {
+        loading.value = false;
+      }
+    };
+
+    onMounted(fetchInitialData);
 
     const meetings = reactive([
       // ...这里是会议的样本数据，实际应用中应从后端获取...
     ]);
 
-    const toggleEdit = () => {
+    const toggleEdit = async() => {
       editable.value = !editable.value;
       if (!editable.value) {
-        console.log('保存会议信息', meetings);
-        // 在这里添加保存逻辑，如发送到后端
+        try {
+          const response = await api.updateMeeting(meetings.value);
+          if (!response.data.success) {
+            errorMessage.value = response.data.message || 'Failed to update meeting';
+          }
+        } catch (error) {
+          console.error('更新会议信息失败', error);
+          errorMessage.value = 'Error while updating meeting';
+        }
       }
     };
 
@@ -101,7 +128,16 @@ export default {
       router.push({ name: 'Home' });
     };
 
-    return { meetings, editable, toggleEdit, goBack, availableParticipants, availableResources };
+    return { 
+      meetings, 
+      editable, 
+      toggleEdit, 
+      goBack, 
+      availableParticipants, 
+      availableResources,
+      loading,
+      errorMessage
+    };
   }
 };
 </script>
