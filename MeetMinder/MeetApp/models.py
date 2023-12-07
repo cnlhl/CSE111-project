@@ -1,5 +1,17 @@
 from django.db import models
+from django.contrib.auth.models import AbstractBaseUser
 
+class MyUser(AbstractBaseUser):
+    userid = models.IntegerField(primary_key=True)
+    username = models.CharField(max_length=99, unique=True)
+    email = models.CharField(max_length=99)
+    password = models.CharField(max_length=99)
+
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['email']
+
+    class Meta:
+        db_table = 'user' 
 
 # User Table Model
 class User(models.Model):

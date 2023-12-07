@@ -17,10 +17,11 @@ const router = createRouter({
       component: UserLogin
     },
     // 其他路由...
-    {
-      path: '/home',
+    {    
+      path: '/home/:userId/:username', // 使用冒号定义参数
       name: 'Home',
-      component: HomePage
+      component: HomePage,
+      props: true // 启用参数作为 props 传递
     },
     {
       path: '/create-meeting',

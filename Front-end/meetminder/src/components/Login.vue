@@ -33,11 +33,18 @@ export default {
 
     const login = async () => {
       try {
-        const response = await api.loginUser(username.value,password.value);
-        
+        console.log('登录', username.value, password.value);
+        const response = await api.loginUser(username.value, password.value);
         if (response.data.success) {
           // 成功登录，更新主页信息并跳转
-          router.push({ name: 'Home', params: response });
+          console.log('登录成功', response);
+          router.push({
+            name: 'Home',
+            params: {
+              userId: response.data.userid,
+              username: response.data.username
+            }
+          });
         } else {
           // 显示错误信息
           loginError.value = true;
@@ -53,30 +60,33 @@ export default {
 </script>
 
 <style scoped>
-  .login-container {
-    max-width: 300px;
-    margin: 0 auto;
-    padding: 20px;
-  }
-  label {
-    display: block;
-    margin-bottom: 5px;
-  }
-  input[type="text"],
-  input[type="password"] {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 20px;
-  }
-  button {
-    width: 100%;
-    padding: 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
-  button:hover {
-    background-color: #45a049;
-  }
-</style>
+.login-container {
+  max-width: 300px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 20px;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049;
+}</style>

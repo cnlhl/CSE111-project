@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-  baseURL: 'http://your-backend-url',
+  baseURL: 'http://localhost:8000/api/',
   withCredentials: false, // 根据你的设置调整
   headers: {
     Accept: 'application/json',
@@ -11,9 +11,13 @@ const apiClient = axios.create({
 });
 
 export default {
-  loginUser(username, password) {
-    const response = apiClient.post('/login', { username, password });
-    return response.data;
+ async loginUser(username, password) {
+    const response = await apiClient.post('/login', { username, password });
+    return response;
+  },
+  async getUserData(userId) {
+    const response = await apiClient.get(`/users/${userId}`);
+    return response;
   },
   getParticipants() {
     return apiClient.get('/participants');

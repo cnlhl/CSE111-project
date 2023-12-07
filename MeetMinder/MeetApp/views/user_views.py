@@ -28,16 +28,20 @@ def signin_user(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
 
-        # Authenticate User based on Credential
-        user = authenticate(request, username=username, password=password)
+        # Get user from the database
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            user = None
 
-        if user is not None:
+        # Check if the retrieved user has the same password
+        if user is not None and user.password == password:
             return JsonResponse({'success': True, 'message': 'User authenticated successfully'})
         else:
             return JsonResponse({'success': False, 'message': 'Invalid username or password'}, status=400)
     else:
         return HttpResponse("Invalid Request Method!", status=400)
-    
+  
 def test_user():
     print("Hello World!")
     pass
