@@ -5,6 +5,7 @@ import CreateMeeting from '@/components/CreateMeeting.vue';
 import ViewMeeting from '@/components/ViewMeeting.vue';
 import AttendanceMeeting from '@/components/AttendanceMeeting.vue';
 import UserRegister from '@/components/UserRegister.vue';
+import ManageResource from '@/components/ManageResource.vue';
 
 // 创建路由器实例
 const router = createRouter({
@@ -40,6 +41,11 @@ const router = createRouter({
       path: '/register',
       name: 'Register',
       component: UserRegister
+    },
+    {
+      path: '/manage-resource',
+      name: 'ManageResource',
+      component: ManageResource
     }
   ],
 });

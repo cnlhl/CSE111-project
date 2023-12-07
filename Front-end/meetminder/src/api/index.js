@@ -35,5 +35,14 @@ export default {
   },
   updateMeetingStatus(meetingId, status) {
     return apiClient.put(`/meetings/${meetingId}/status`, { status });
+  },
+  createResource(resource) {
+    return apiClient.post('/resources', resource);
+  },
+  updateResource(resource) {
+    return apiClient.put(`/resources/${resource.id}`, resource);
+  },
+  deleteResource(resourceId) {
+    return apiClient.delete(`/resources/${resourceId}`);
   }
 };

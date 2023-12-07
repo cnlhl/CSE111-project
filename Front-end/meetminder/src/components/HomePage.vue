@@ -11,6 +11,7 @@
         <button @click="createMeeting">Create Meeting</button>
         <button @click="viewMeeting">View Meeting</button>
         <button @click="attendMeeting">Attendance to Meeting</button>
+        <button @click="manageResource">Manage Resources</button>
       </div>
       <div class="notification-bar">
         <h2>Notification</h2>
@@ -44,8 +45,30 @@
         setInterval(() => {
           currentTime.value = new Date().toLocaleTimeString();
         }, 1000);
+
+      const manageResource = () => {
+        route.push({ name: 'ManageResource' });
+      };
+
+      const createMeeting = () => {
+        route.push({ name: 'CreateMeeting' });
+      };
   
-        return { userData, currentTime };
+      const viewMeeting = () => {
+        route.push({ name: 'ViewMeeting' });
+      };
+  
+      const attendMeeting = () => {
+        route.push({ name: 'AttendanceMeeting' });
+      };
+  
+        return { 
+          userData,
+          manageResource,
+          createMeeting,
+          viewMeeting,
+          attendMeeting, 
+          currentTime };
       });
     }
   };
@@ -62,6 +85,13 @@
   .action-bar button {
     margin: 5px;
     padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  .action-bar button:hover {
+    background-color: #45a049;
   }
   </style>
   
