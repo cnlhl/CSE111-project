@@ -20,13 +20,23 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-9jzzse2aa2ea9vc10xm7qxwvixpy=g_r(btpw-@#ey!=&z*174'
+SECRET_KEY = 'django-insecure-k-)4-=cuf9*3&*&jpmtip=obv5ne*^u)1j=rzw9l03g2d!il6c'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'meetminder',
+        'USER': 'root',
+        'PASSWORD': 'meetminder',
+        'HOST': '34.121.148.219',
+        'PORT': '3306',
+    }
+}
 
 # Application definition
 
@@ -38,6 +48,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'meetings',
+    'rest_framework',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
@@ -76,16 +88,12 @@ WSGI_APPLICATION = 'meetminder.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'meetminder',
-        'USER': 'root',
-        'PASSWORD': 'meetminder',
-        'HOST': '34.121.148.219',
-        'PORT': '3306',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 
 # Password validation

@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-  baseURL: 'http://localhost:8000/api/',
+  baseURL: 'http://127.0.0.1:5000/',
   withCredentials: false, // 根据你的设置调整
   headers: {
     Accept: 'application/json',
@@ -15,8 +15,8 @@ export default {
     const response = await apiClient.post('/login', { username, password });
     return response;
   },
-  async getUserData(userId) {
-    const response = await apiClient.get(`/users/${userId}`);
+  async getUserData() {
+    const response = await apiClient.get(`/users`);
     return response;
   },
   getParticipants() {
@@ -28,7 +28,7 @@ export default {
   createMeeting(meeting) {
     return apiClient.post('/meetings', meeting);
   },
-  getMeetings() {
+  async getMeetings() {
     return apiClient.get('/meetings');
   },
   updateMeeting(meeting) {
@@ -38,7 +38,7 @@ export default {
     return apiClient.get('/meetings/pending');
   },
   updateMeetingStatus(meetingId, status) {
-    return apiClient.put(`/meetings/${meetingId}/status`, { status });
+    return apiClient.post(`/updateattendance`, { meetingId,status });
   },
   createResource(resource) {
     return apiClient.post('/resources', resource);
@@ -48,5 +48,8 @@ export default {
   },
   deleteResource(resourceId) {
     return apiClient.delete(`/resources/${resourceId}`);
-  }
+  },
+  createUsers(user) {
+    return apiClient.post('/register', user);
+  },
 };

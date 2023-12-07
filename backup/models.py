@@ -1,9 +1,13 @@
 from django.db import models
 
 class User(models.Model):
-    username = models.CharField(max_length=99)
-    email = models.CharField(max_length=99)
+    userid = models.AutoField(primary_key=True)
+    username = models.CharField(max_length=99, unique=True)
+    email = models.EmailField(max_length=99, unique=True)
     password = models.CharField(max_length=99)
+
+    class Meta:
+        db_table = 'user'
 
     def __str__(self):
         return self.username
@@ -32,7 +36,7 @@ class Attendee(models.Model):
     status = models.TextField()
 
     def __str__(self):
-        return f"{self.user.username} attending {self.meeting.title}"
+        return f'{self.user.username} - {self.meeting.title}'
 
 class Notification(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
@@ -40,7 +44,7 @@ class Notification(models.Model):
     timestamp = models.DateField()
 
     def __str__(self):
-        return f"Notification for {self.user.username}"
+        return f'Notification for {self.user.username} on {self.timestamp}'
 
 class Resource(models.Model):
     resourcename = models.TextField()
@@ -58,8 +62,8 @@ class Room(models.Model):
         return self.name
 
 class MeetingResource(models.Model):
-    meeting = models.ForeignKey(Meeting, on_delete=models.CASCADE, related_name='meeting_resources')
-    resource = models.ForeignKey(Resource, on_delete=models.CASCADE, related_name='resource_meetings')
+    meeting = models.ForeignKey(Meeting, on_delete=models.CASCADE, related_name='resources')
+    resource = models.ForeignKey(Resource, on_delete=models.CASCADE, related_name='meetings')
 
     def __str__(self):
-        return f"{self.meeting.title} - {self.resource.resourcename}"
+        return f'Resource {self.resource.resourcename} for meeting {self.meeting.title}'

@@ -39,11 +39,7 @@ export default {
           // 成功登录，更新主页信息并跳转
           console.log('登录成功', response);
           router.push({
-            name: 'Home',
-            params: {
-              userId: response.data.userid,
-              username: response.data.username
-            }
+            name: 'Home'
           });
         } else {
           // 显示错误信息

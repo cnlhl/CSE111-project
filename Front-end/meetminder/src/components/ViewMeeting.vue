@@ -8,8 +8,6 @@
             <th>Description</th>
             <th>Time</th>
             <th>Location</th>
-            <th>Participants</th>
-            <th>Resources</th>
             <th>Role</th>
           </tr>
         </thead>
@@ -31,30 +29,6 @@
               <input v-if="editable" type="text" v-model="meeting.location">
               <span v-else>{{ meeting.location }}</span>
             </td>
-            <td>
-              <VueMultiselect
-                v-if="editable"
-                v-model="meeting.participants"
-                :options="availableParticipants"
-                :multiple="true"
-                placeholder="Select Participants"
-                label="name"
-                track-by="name"
-              ></VueMultiselect>
-              <span v-else>{{ meeting.participants.join(', ') }}</span>
-            </td>
-            <td>
-              <VueMultiselect
-                v-if="editable"
-                v-model="meeting.resources"
-                :options="availableResources"
-                :multiple="true"
-                placeholder="Select Resources"
-                label="name"
-                track-by="name"
-              ></VueMultiselect>
-              <span v-else>{{ meeting.resources.join(', ') }}</span>
-            </td>
             <td>{{ meeting.role === 'Organizer' ? 'Organizer' : 'Participant' }}</td>
           </tr>
         </tbody>
@@ -66,81 +40,66 @@
   
   
   <script>
-import { ref, reactive,onMounted } from 'vue';
-import { useRouter } from 'vue-router';
-import VueMultiselect from 'vue-multiselect';
-import api from '@/api';
-
-export default {
-  components: {
-    VueMultiselect
-  },
-  name: 'ViewMeeting',
-  setup() {
-    const router = useRouter();
-    const editable = ref(false);
-    const availableParticipants = ref([]);
-    const availableResources = ref([]);
-    const loading = ref(false);
-    const errorMessage = ref('');
-
-    const fetchInitialData = async () => {
-      try {
-        loading.value = true;
-        const [meetingsResponse, participantsResponse, resourcesResponse] = await Promise.all([
-          api.getMeetings(),
-          api.getParticipants(),
-          api.getResources()
-        ]);
-        meetings.value = meetingsResponse.data;
-        availableParticipants.value = participantsResponse.data;
-        availableResources.value = resourcesResponse.data;
-      } catch (error) {
-        console.error('获取会议数据失败', error);
-        errorMessage.value = 'Failed to fetch data';
-      } finally {
-        loading.value = false;
-      }
-    };
-
-    onMounted(fetchInitialData);
-
-    const meetings = reactive([
-      // ...这里是会议的样本数据，实际应用中应从后端获取...
-    ]);
-
-    const toggleEdit = async() => {
-      editable.value = !editable.value;
-      if (!editable.value) {
+  import { ref, onMounted } from 'vue';
+  import { useRouter } from 'vue-router';
+  import api from '@/api';
+  
+  export default {
+    name: 'ViewMeeting',
+    setup() {
+      const router = useRouter();
+      const editable = ref(false);
+      const loading = ref(false);
+      const errorMessage = ref('');
+      const meetings = ref([]);  // 使用 ref 而不是 reactive
+  
+      const fetchInitialData = async () => {
         try {
-          const response = await api.updateMeeting(meetings.value);
-          if (!response.data.success) {
-            errorMessage.value = response.data.message || 'Failed to update meeting';
-          }
+          loading.value = true;
+          const response = await api.getMeetings();
+          meetings.value = response.data;  // 更新 meetings
+          console.log('meetings:', meetings.value);
         } catch (error) {
-          console.error('更新会议信息失败', error);
-          errorMessage.value = 'Error while updating meeting';
+          console.error('获取会议数据失败', error);
+          errorMessage.value = 'Failed to fetch data';
+        } finally {
+          loading.value = false;
         }
-      }
-    };
-
-    const goBack = () => {
-      router.push({ name: 'Home' });
-    };
-
-    return { 
-      meetings, 
-      editable, 
-      toggleEdit, 
-      goBack, 
-      availableParticipants, 
-      availableResources,
-      loading,
-      errorMessage
-    };
-  }
-};
-</script>
+      };
+  
+      onMounted(fetchInitialData);
+  
+      const toggleEdit = async () => {
+        editable.value = !editable.value;
+        if (!editable.value) {
+          try {
+            const response = await api.updateMeeting(meetings.value);
+            if (!response.data.success) {
+              errorMessage.value = response.data.message || 'Failed to update meeting';
+            }
+          } catch (error) {
+            console.error('更新会议信息失败', error);
+            errorMessage.value = 'Error while updating meeting';
+          }
+        }
+      };
+  
+      const goBack = () => {
+        router.push({ name: 'Home' });
+      };
+  
+      return { 
+        meetings, 
+        editable, 
+        toggleEdit, 
+        goBack, 
+        loading, 
+        errorMessage 
+      };
+    }
+  };
+  </script>
+  
 
   
   <style scoped>

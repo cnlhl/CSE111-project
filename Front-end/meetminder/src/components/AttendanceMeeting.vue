@@ -20,7 +20,7 @@
             <td>
               <button v-if="meeting.status === 'pending'" @click="attendMeeting(meeting, true)">Attend</button>
               <button v-if="meeting.status === 'pending'" @click="attendMeeting(meeting, false)">Reject</button>
-              <span v-else>{{ meeting.status === 'attended' ? '已出席' : '已拒绝' }}</span>
+              <span v-else>{{ meeting.status === 'attended' ? 'Agreed' : 'Rejected' }}</span>
             </td>
           </tr>
         </tbody>
@@ -30,7 +30,7 @@
   </template>
   
   <script>
-  import { reactive,onMounted } from 'vue';
+  import { ref,onMounted } from 'vue';
   import { useRouter } from 'vue-router';
   import api from '@/api';
   
@@ -38,12 +38,14 @@
     name: 'AttendanceMeeting',
     setup() {
       const router = useRouter();
-      const meetings = reactive([]);
+      const meetings = ref([]);
 
       const fetchMeetings = async () => {
         try {
           const response = await api.getPendingMeetings();
+          console.log('获取会议列表', response);
           meetings.value = response.data;
+          console.log('meetings:', meetings);
         } catch (error) {
           console.error('获取会议列表失败', error);
         }
@@ -53,14 +55,13 @@
   
       const attendMeeting = async(meeting, willAttend) => {
         const status = willAttend ? 'attended' : 'rejected';
-        const response = await api.updateMeetingStatus(meeting.id,status);
+        const response = await api.updateMeetingStatus(meeting.meetingid,status);
         if(response.data.success){
           meeting.status = status;
         }else{
           console.error('更新会议状态失败');
         }
         console.log('会议状态更新', meeting);
-        // 这里添加发送状态更新到后端的逻辑
       };
   
       const goBack = () => {

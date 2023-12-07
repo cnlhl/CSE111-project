@@ -21,13 +21,13 @@
       <div style="margin-bottom: 20px;">
         <label for="participants">Participants: </label>
         <VueMultiselect v-model="meeting.participants" :options="availableParticipants" :multiple="true"
-          :searchable="true" :close-on-select="false" placeholder="Select Participants" label="name" track-by="name"
+          :searchable="true" :close-on-select="false" placeholder="Select Participants" label="username" track-by="userid"
           @search-change="asyncFindParticipants"></VueMultiselect>
       </div>
       <div style="margin-bottom: 20px;">
         <label for="resources">Resources: </label>
         <VueMultiselect v-model="meeting.resources" :options="availableResources" :multiple="true" :searchable="true"
-          :close-on-select="false" placeholder="Select Resources" label="name" track-by="name"
+          :close-on-select="false" placeholder="Select Resources" label="resourcename" track-by="resourceid"
           @search-change="asyncFindResources"></VueMultiselect>
       </div>
       <button type="submit" style="margin-bottom: 20px;">Create Meeting</button>
@@ -70,6 +70,7 @@ export default {
           api.getParticipants(),
           api.getResources()
         ]);
+        console.log('获取数据', participantsResponse, resourcesResponse);
         availableParticipants.value = participantsResponse.data;
         availableResources.value = resourcesResponse.data;
       } catch (error) {

@@ -22,11 +22,64 @@
           Registration successful.
           <router-link to="/login">Go to login</router-link>
         </p>
+        <router-link to="/login" class="back-to-login">Back to Login</router-link>
       </div>
     </div>
   </template>
   
-  <!-- ...Script and other sections remain the same... -->
+  <script>
+  import { ref } from 'vue';
+  import api from '@/api'; // 确保已正确导入 api
+  
+  export default {
+    name: 'UserRegister',
+    setup() {
+      const username = ref('');
+      const email = ref('');
+      const password = ref('');
+      const confirmPassword = ref('');
+      const registrationError = ref('');
+      const registrationSuccess = ref(false);
+  
+      const register = async () => {
+        if (password.value !== confirmPassword.value) {
+          registrationError.value = 'Passwords do not match.';
+          return;
+        }
+  
+        try {
+          const user = {
+            username: username.value,
+            email: email.value,
+            password: password.value
+          };
+          const response = await api.createUsers(user);
+          if (response.data.success) {
+            registrationSuccess.value = true;
+            registrationError.value = '';
+          } else {
+            registrationError.value = response.data.message || 'Registration failed.';
+            registrationSuccess.value = false;
+          }
+        } catch (error) {
+          registrationError.value = error.message || 'Registration failed.';
+          registrationSuccess.value = false;
+        }
+      };
+  
+      return {
+        username,
+        email,
+        password,
+        confirmPassword,
+        register,
+        registrationError,
+        registrationSuccess
+      };
+    }
+  };
+  </script>
+  
   
   <style scoped>
   .register-container {
@@ -36,6 +89,15 @@
     height: 100vh;
     background-color: #f7f7f7;
   }
+
+  .back-to-login {
+  display: block;
+  text-align: center;
+  margin-top: 1rem;
+  color: #333;
+  text-decoration: none;
+}
+
   
   .register-box {
     background: white;
