@@ -32,7 +32,7 @@ export default {
     return apiClient.get('/meetings');
   },
   updateMeeting(meeting) {
-    return apiClient.put(`/meetings/${meeting.id}`, meeting);
+    return apiClient.post(`/updatemeetings`, meeting);
   },
   getPendingMeetings() {
     return apiClient.get('/meetings/pending');
@@ -44,12 +44,15 @@ export default {
     return apiClient.post('/resources', resource);
   },
   updateResource(resource) {
-    return apiClient.put(`/resources/${resource.id}`, resource);
+    return apiClient.put(`/updateresources`, resource);
   },
-  deleteResource(resourceId) {
-    return apiClient.delete(`/resources/${resourceId}`);
+  deleteResource(resourceid) {
+    return apiClient.delete(`/deleteresources/${resourceid}`);
   },
   createUsers(user) {
     return apiClient.post('/register', user);
   },
+  async getRooms() {
+    return apiClient.get(`/rooms`);
+  }
 };

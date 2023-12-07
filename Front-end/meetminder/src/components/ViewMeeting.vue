@@ -103,22 +103,52 @@
 
   
   <style scoped>
-    @import 'vue-multiselect/dist/vue-multiselect.css';
-    .view-meeting-container {
-      padding: 20px;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    th, td {
-      border: 1px solid #ddd;
-      padding: 8px;
-      text-align: left;
-    }
-    button {
-      margin: 10px 5px;
-      padding: 10px;
-    }
+  @import 'vue-multiselect/dist/vue-multiselect.css';
+
+  .view-meeting-container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    color: #333;
+    background-color: #f5f5f5;
+  }
+
+  h1 {
+    color: #4CAF50;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+
+  th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+
+  button {
+    margin: 10px 5px;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 1em;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+
+  button:hover {
+    background-color: #45a049;
+  }
+
+  input[type="text"], textarea, input[type="datetime-local"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
   </style>
-  

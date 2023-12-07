@@ -72,23 +72,43 @@
     }
   };
   </script>
-  
   <style scoped>
-    .attendance-meeting-container {
-      padding: 20px;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    th, td {
-      border: 1px solid #ddd;
-      padding: 8px;
-      text-align: left;
-    }
-    button {
-      margin: 10px 5px;
-      padding: 10px;
-    }
+  .attendance-meeting-container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    color: #333;
+    background-color: #f5f5f5;
+  }
+
+  h1 {
+    color: #4CAF50;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+
+  th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+
+  button {
+    margin: 10px 5px;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 1em;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+
+  button:hover {
+    background-color: #45a049;
+  }
   </style>
-  

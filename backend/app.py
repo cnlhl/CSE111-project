@@ -1,6 +1,8 @@
 from flask import Flask, request, jsonify
 import pymysql
 from flask_cors import CORS
+from datetime import datetime
+from email.utils import parsedate_to_datetime
 
 app = Flask(__name__)
 CORS(app)
@@ -115,7 +117,7 @@ def get_meetings():
     try:
         with connection.cursor() as cursor:
             cursor.execute("""
-                SELECT title, description, time, location,
+                SELECT meeting.meetingid as meetingid,title, description, time, location,
                 CASE 
                     WHEN attendee.userid = meeting.organizerid THEN 'Organizer'
                     ELSE 'Participant'
@@ -265,7 +267,104 @@ def update_attendance():
         return jsonify({'error': str(e)}), 500
     finally:
         connection.close()
+        
+@app.route('/updateresources', methods=['PUT'])
+def updateresources():
+    data = request.json
+    # {'description': 'New Description', 'resourceid': 1, 'resourcename': 'resource1', 'editing': True}     
+    description = data.get('description')
+    resourceid = data.get('resourceid')
+    resourcename = data.get('resourcename')
+    roomid = data.get('roomid')
+    
+    connection = get_db_connection()
+    try:
+        with connection.cursor() as cursor:
+            update_resource_sql = """
+                UPDATE resource
+                SET description = %s, resourcename = %s
+                WHERE resourceid = %s
+            """
+            cursor.execute(update_resource_sql, (description, resourcename, resourceid))
+            print(description, resourcename, resourceid)
+            if roomid is not None:
+                update_resource_sql = """
+                    UPDATE room
+                    SET name = %s,capacity = %s
+                    WHERE roomid = %s
+                """
+                cursor.execute(update_resource_sql, (data.get('roomname'), data.get('capacity'), roomid))
+                print(roomid, resourceid)
+            connection.commit()
+            return jsonify({'success': True})
+    except pymysql.MySQLError as e:
+        connection.rollback()
+        print(e)
+        return jsonify({'error': str(e)}), 500
+    finally:
+        connection.close()
 
+@app.route('/deleteresources/<int:resource_id>', methods=['DELETE'])
+def deleteresources(resource_id):
+    print(resource_id)
+    connection = get_db_connection()
+    try:
+        with connection.cursor() as cursor:
+            # 删除资源
+            delete_resource_sql = """
+            DELETE FROM resource
+            WHERE resourceid = %s
+            """
+            cursor.execute(delete_resource_sql, (resource_id))
+            print(resource_id)
+
+            connection.commit()
+            return jsonify({'success': True})
+    except pymysql.MySQLError as e:
+        connection.rollback()
+        print(e)
+        return jsonify({'error': str(e)}), 500
+    finally:
+        connection.close()
+
+@app.route('/rooms', methods=['get'])
+def get_rooms():
+    connection = get_db_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM room")
+            rooms = cursor.fetchall()
+            return jsonify(rooms)
+    except pymysql.MySQLError as e:
+        print(e)
+        return jsonify({'error': str(e)}), 500
+    finally:
+        connection.close()
+        
+@app.route('/updatemeetings', methods=['POST'])
+def updatemeetings():
+    data = request.json
+    #  [{'meetingid': 42, 'title': 'test', 'description': 'test', 'time': datetime.datetime(2023, 12, 1, 12, 12), 'location': 'west', 'Role': 'Organizer'}, {'meetingid': 43, 'title': "111's orientation", 'description': 'welcome', 'time': datetime.datetime(2023, 12, 22, 12, 13), 'location': 'library', 'Role': 'Participant'}]
+    connection = get_db_connection()
+    try:
+        with connection.cursor() as cursor:
+            for meeting in data:
+                time = parsedate_to_datetime(meeting['time'])
+                update_meeting_sql = """
+                    UPDATE meeting
+                    SET title = %s, description = %s, time = %s, location = %s
+                    WHERE meetingid = %s
+                """
+                cursor.execute(update_meeting_sql, (meeting['title'], meeting['description'],  time, meeting['location'], meeting['meetingid']))
+                print(meeting['title'], meeting['description'], time, meeting['location'], meeting['meetingid'])
+            connection.commit()
+            return jsonify({'success': True})
+    except pymysql.MySQLError as e:
+        connection.rollback()
+        print(e)
+        return jsonify({'error': str(e)}), 500
+    finally:
+        connection.close()
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -96,28 +96,53 @@ export default {
 };
 </script>
   
-  
+
 <style scoped>
 .home-container {
   padding: 20px;
   text-align: center;
+  font-family: Arial, sans-serif;
+  color: #333;
+  background-color: #f5f5f5;
+}
+
+h1 {
+  color: #4CAF50;
 }
 
 .user-status p,
 .notification-bar p {
   margin: 10px 0;
+  font-size: 1.2em;
+}
+
+.action-bar {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
 }
 
 .action-bar button {
   margin: 5px;
-  padding: 10px;
+  padding: 10px 20px;
   background-color: #4CAF50;
   color: white;
   border: none;
   cursor: pointer;
+  font-size: 1em;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
 }
 
 .action-bar button:hover {
   background-color: #45a049;
-}</style>
+}
+
+.notification-bar {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+</style>
   
