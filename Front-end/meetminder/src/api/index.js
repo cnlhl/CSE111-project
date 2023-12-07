@@ -29,5 +29,11 @@ export default {
   },
   updateMeeting(meeting) {
     return apiClient.put(`/meetings/${meeting.id}`, meeting);
+  },
+  getPendingMeetings() {
+    return apiClient.get('/meetings/pending');
+  },
+  updateMeetingStatus(meetingId, status) {
+    return apiClient.put(`/meetings/${meetingId}/status`, { status });
   }
 };

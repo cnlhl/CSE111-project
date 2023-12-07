@@ -30,22 +30,35 @@
   </template>
   
   <script>
-  import { reactive } from 'vue';
+  import { reactive,onMounted } from 'vue';
   import { useRouter } from 'vue-router';
+  import api from '@/api';
   
   export default {
     name: 'AttendanceMeeting',
     setup() {
       const router = useRouter();
-      const meetings = reactive([
-        // 这里是样本数据，实际应用中应从后端获取
-        { id: 1, title: '会议1', description: '描述1', time: '2023-10-10T10:00', location: '地点1', status: 'pending' },
-        { id: 2, title: '会议2', description: '描述2', time: '2023-10-11T11:00', location: '地点2', status: 'pending' }
-        // ...更多会议
-      ]);
+      const meetings = reactive([]);
+
+      const fetchMeetings = async () => {
+        try {
+          const response = await api.getPendingMeetings();
+          meetings.value = response.data;
+        } catch (error) {
+          console.error('获取会议列表失败', error);
+        }
+      };
+
+      onMounted(fetchMeetings);
   
-      const attendMeeting = (meeting, willAttend) => {
-        meeting.status = willAttend ? 'attended' : 'rejected';
+      const attendMeeting = async(meeting, willAttend) => {
+        const status = willAttend ? 'attended' : 'rejected';
+        const response = await api.updateMeetingStatus(meeting.id,status);
+        if(response.data.success){
+          meeting.status = status;
+        }else{
+          console.error('更新会议状态失败');
+        }
         console.log('会议状态更新', meeting);
         // 这里添加发送状态更新到后端的逻辑
       };
