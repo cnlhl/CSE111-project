@@ -12,6 +12,8 @@
       </div>
       <button type="submit">Login</button>
     </form>
+    <p v-if="loginError" class="error-message">Username/Password incorrect</p>
+    <p class="register-link">New user? <router-link to="/register">Register here</router-link></p>
   </div>
   <p v-if="loginError" class="error-message">Username/Password incorrect</p>
 </template>
