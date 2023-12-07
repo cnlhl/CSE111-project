@@ -1,8 +1,27 @@
+
 import axios from 'axios';
 
-const instance = axios.create({
-  baseURL: 'http://your-backend-api-url', // 替换为你的后端 API 地址
-  // 可以添加更多配置，如 headers 等
+const apiClient = axios.create({
+  baseURL: 'http://your-backend-url',
+  withCredentials: false, // 根据你的设置调整
+  headers: {
+    Accept: 'application/json',
+    'Content-Type': 'application/json'
+  }
 });
 
-export default instance;
+export default {
+  loginUser(username, password) {
+    const response = apiClient.post('/login', { username, password });
+    return response.data;
+  },
+  getParticipants() {
+    return apiClient.get('/participants');
+  },
+  getResources() {
+    return apiClient.get('/resources');
+  },
+  createMeeting(meeting) {
+    return apiClient.post('/meetings', meeting);
+  }
+};

@@ -3,38 +3,49 @@
     <h1>Meetminder</h1>
     <form @submit.prevent="login">
       <div>
-        <label for="username">用户名：</label>
+        <label for="username">Username: </label>
         <input type="text" id="username" v-model="username">
       </div>
       <div>
-        <label for="password">密码：</label>
+        <label for="password">Password: </label>
         <input type="password" id="password" v-model="password">
       </div>
-      <button type="submit">登录</button>
+      <button type="submit">Login</button>
     </form>
   </div>
+  <p v-if="loginError" class="error-message">Username/Password incorrect</p>
 </template>
 
 <script>
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import api from '@/api';
+
 export default {
-  name: 'UserLogin', // 改为多单词的组件名称
-  data() {
-    return {
-      username: '',
-      password: ''
-    };
-  },
+  name: 'UserLogin',
   setup() {
     const router = useRouter();
-    return { router };
-  },
-  methods: {
-    login() {
-      // 登录逻辑
-      console.log('登录', this.username, this.password);
-      this.router.push({ name: 'Home' });
-    }
+    const username = ref('');
+    const password = ref('');
+    const loginError = ref(false);
+
+    const login = async () => {
+      try {
+        const response = await api.loginUser(username.value,password.value);
+        
+        if (response.data.success) {
+          // 成功登录，更新主页信息并跳转
+          router.push({ name: 'Home', params: response });
+        } else {
+          // 显示错误信息
+          loginError.value = true;
+        }
+      } catch (error) {
+        console.error('登录请求失败', error);
+      }
+    };
+
+    return { username, password, login, loginError };
   }
 };
 </script>

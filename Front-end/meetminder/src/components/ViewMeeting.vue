@@ -1,16 +1,16 @@
 <template>
     <div class="view-meeting-container">
-      <h1>会议信息</h1>
+      <h1>Meeting information</h1>
       <table>
         <thead>
           <tr>
-            <th>标题</th>
-            <th>描述</th>
-            <th>时间</th>
-            <th>地点</th>
-            <th>参与者</th>
-            <th>资源</th>
-            <th>会议角色</th>
+            <th>Theme</th>
+            <th>Description</th>
+            <th>Time</th>
+            <th>Location</th>
+            <th>Participants</th>
+            <th>Resources</th>
+            <th>Role</th>
           </tr>
         </thead>
         <tbody>
@@ -37,7 +37,7 @@
                 v-model="meeting.participants"
                 :options="availableParticipants"
                 :multiple="true"
-                placeholder="选择参与者"
+                placeholder="Select Participants"
                 label="name"
                 track-by="name"
               ></VueMultiselect>
@@ -49,18 +49,18 @@
                 v-model="meeting.resources"
                 :options="availableResources"
                 :multiple="true"
-                placeholder="选择资源"
+                placeholder="Select Resources"
                 label="name"
                 track-by="name"
               ></VueMultiselect>
               <span v-else>{{ meeting.resources.join(', ') }}</span>
             </td>
-            <td>{{ meeting.role === 'Organizer' ? '组织者' : '参与者' }}</td>
+            <td>{{ meeting.role === 'Organizer' ? 'Organizer' : 'Participant' }}</td>
           </tr>
         </tbody>
       </table>
-      <button @click="toggleEdit">{{ editable ? '保存' : '管理' }}</button>
-      <button @click="goBack">返回</button>
+      <button @click="toggleEdit">{{ editable ? 'Save' : 'Manage' }}</button>
+      <button @click="goBack">goBack</button>
     </div>
   </template>
   

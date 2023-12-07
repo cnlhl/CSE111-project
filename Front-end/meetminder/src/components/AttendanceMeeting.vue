@@ -1,14 +1,14 @@
 <template>
     <div class="attendance-meeting-container">
-      <h1>参加会议</h1>
+      <h1>Attendance to Meeting</h1>
       <table>
         <thead>
           <tr>
-            <th>标题</th>
-            <th>描述</th>
-            <th>时间</th>
-            <th>地点</th>
-            <th>操作</th>
+            <th>Theme</th>
+            <th>Description</th>
+            <th>Time</th>
+            <th>Location</th>
+            <th>Operation</th>
           </tr>
         </thead>
         <tbody>
@@ -18,14 +18,14 @@
             <td>{{ meeting.time }}</td>
             <td>{{ meeting.location }}</td>
             <td>
-              <button v-if="meeting.status === 'pending'" @click="attendMeeting(meeting, true)">出席</button>
-              <button v-if="meeting.status === 'pending'" @click="attendMeeting(meeting, false)">拒绝</button>
+              <button v-if="meeting.status === 'pending'" @click="attendMeeting(meeting, true)">Attend</button>
+              <button v-if="meeting.status === 'pending'" @click="attendMeeting(meeting, false)">Reject</button>
               <span v-else>{{ meeting.status === 'attended' ? '已出席' : '已拒绝' }}</span>
             </td>
           </tr>
         </tbody>
       </table>
-      <button @click="goBack">返回</button>
+      <button @click="goBack">goBack</button>
     </div>
   </template>
   
