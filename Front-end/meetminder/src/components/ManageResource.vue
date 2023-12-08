@@ -1,6 +1,7 @@
 <template>
   <div class="manage-resource-container">
     <h1>Manage Resources</h1>
+    <input type="text" v-model="searchTerm" placeholder="Search by Resource Name" style="width: 200px; float: left;">
     <table>
       <thead>
         <tr>
@@ -13,7 +14,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="resource in resources" :key="resource.resourceid" readonly>
+        <tr v-for="resource in filteredResources" :key="resource.resourceid">
           <td>{{ resource.resourceid }}</td>
           <td>
             <input v-if="resource.editing" type="text" v-model="resource.resourcename">
@@ -43,21 +44,9 @@
             <button @click="deleteResource(resource)">Delete</button>
           </td>
         </tr>
-        <tr v-if="addingResource">
-          <td>New</td>
-          <td>
-            <input type="text" v-model="newResource.resourcename">
-          </td>
-          <td>
-            <input type="text" v-model="newResource.description">
-          </td>
-          <td>
-            <button @click="cancelAddingResource">Cancel</button>
-          </td>
-        </tr>
       </tbody>
     </table>
-    <button @click="confirmAddResource">Add</button>
+    <button @click="addResource">Add</button>
     <button @click="goHome">Go Home</button>
   </div>
 </template>
@@ -74,6 +63,16 @@ export default {
     const resources = reactive([]);
     const addingResource = ref(false);
     const newResource = ref({ name: '', type: '' });
+    const searchTerm = ref('');
+
+    const filteredResources = computed(() => {
+      if (!searchTerm.value) {
+        return resources;
+      }
+      return resources.filter(resource =>
+        resource.resourcename.toLowerCase().includes(searchTerm.value.toLowerCase())
+      );
+    });
 
     const fetchResources = async () => {
   try {
@@ -139,10 +138,6 @@ export default {
       }
     };
 
-    const startAddingResource = () => {
-      addingResource.value = true;
-    };
-
     const addResource = async () => {
       addingResource.value = true;
       resources.push({
@@ -185,11 +180,12 @@ export default {
       editResource,
       saveResource,
       deleteResource,
-      startAddingResource,
       addResource,
       cancelAddingResource,
       goHome,
-      showRoomDetails
+      showRoomDetails,
+      searchTerm,
+      filteredResources,
     };
   }
 };
@@ -199,21 +195,23 @@ export default {
 .manage-resource-container {
   padding: 20px;
   text-align: center;
+  width: 90%; /* 设置容器宽度为90%，使得左右两边有一定的空白 */
+  margin: auto; /* 自动设置左右边距，使得容器在页面中居中 */
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 20px;
+  font-size: 1.2em; /* 增大字体大小 */
 }
 
 th,
 td {
   border: 1px solid #ddd;
-  padding: 8px;
+  padding: 4px; /* 减小单元格内边距 */
   text-align: left;
   vertical-align: middle;
-  /* 添加垂直居中对齐 */
 }
 
 th {

@@ -121,7 +121,7 @@ def get_meetings():
                 CASE 
                     WHEN attendee.userid = meeting.organizerid THEN 'Organizer'
                     ELSE 'Participant'
-                END AS Role
+                END AS role
                 FROM meeting 
                 JOIN attendee ON meeting.meetingid = attendee.meetingid 
                 WHERE attendee.userid = %s AND attendee.status = 'Attending'
@@ -357,6 +357,30 @@ def updatemeetings():
                 """
                 cursor.execute(update_meeting_sql, (meeting['title'], meeting['description'],  time, meeting['location'], meeting['meetingid']))
                 print(meeting['title'], meeting['description'], time, meeting['location'], meeting['meetingid'])
+            connection.commit()
+            return jsonify({'success': True})
+    except pymysql.MySQLError as e:
+        connection.rollback()
+        print(e)
+        return jsonify({'error': str(e)}), 500
+    finally:
+        connection.close()
+        
+@app.route('/deletemeetings', methods=['POST'])
+def deletemeetings():
+    data = request.json
+    meeting_id = data.get('meetingid')
+    connection = get_db_connection()
+    try:
+        with connection.cursor() as cursor:
+            # 删除会议
+            delete_meeting_sql = """
+            DELETE FROM meeting
+            WHERE meetingid = %s
+            """
+            cursor.execute(delete_meeting_sql, (meeting_id))
+            print(meeting_id)
+
             connection.commit()
             return jsonify({'success': True})
     except pymysql.MySQLError as e:

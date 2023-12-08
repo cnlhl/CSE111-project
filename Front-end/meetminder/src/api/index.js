@@ -54,5 +54,8 @@ export default {
   },
   async getRooms() {
     return apiClient.get(`/rooms`);
+  },
+  deleteMeeting(meetingId) {
+    return apiClient.delete(`/deletemeetings/${meetingId}`);
   }
 };
